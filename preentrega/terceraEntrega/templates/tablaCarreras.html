@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block content %}
+<div class="container">
+    <div class="row mt-2">
+        <a class="btn btn-link" href="{% url 'Home' %}">Volver</a>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        {% for c in carreras_page %}
+        <div class="col-12 mb-2">
+            <div class="card pt-8" style="width: 100%;">
+                <div class="card-body">
+                  <h5 class="card-title">{{ c.nombre }} </h5>
+                  {% if c.ramo_set.exists %}
+                      <h6 class="card-subtitle mb-2 text-muted">Materias:</h6>
+                      <ul class="list-group">
+                          {% for materia in c.ramo_set.all %}
+                              <li class="list-group-item">{{ materia.nombre }}</li>
+                          {% endfor %}
+                      </ul>
+                  {% else %}
+                      <p>No hay materias registradas para esta carrera.</p>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if carreras_page.has_previous %}
+            <a href="?page=1"> &laquo; Primera </a>
+            <a href="?page={{ carreras_page.previous_page_number }}"> anterior </a>
+        {% endif %}
+
+        <span class="current-page">{{ carreras_page.number }}</span>
+
+        {% if carreras_page.has_next %}
+            <a href="?page={{ carreras_page.next_page_number }}"> siguiente </a>
+            <a href="?page={{ carreras_page.paginator.num_pages }}"> Última &raquo; </a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock content %} 
